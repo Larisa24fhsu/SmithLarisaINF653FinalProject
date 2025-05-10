@@ -6,9 +6,53 @@
 		<link rel="stylesheet" href="css/style.css" />
 	</head>
 	<body>
-		<h1>States API Index Page</h1>
-		<p>
-            REST API 
-        </p>
+	 <h2>
+    </h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Request</th>
+                <th>Response</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>/states/</td>
+                <td>All state data returned</td>
+            </tr>
+            <tr>
+                <td>/states/?contig=true</td>
+                <td>All state data for contiguous states (Not AK or HI)</td>
+            </tr>
+            <tr>
+                <td>/states/?contig=false</td>
+                <td>All state data for non-contiguous states (AK, HI)</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span></td>
+                <td>All data for the state URL parameter</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span>/funfact</td>
+                <td>A random fun fact for the state URL parameter</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span>/capital</td>
+                <td>{ ‘state’: stateName, ‘capital’: capitalName }</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span>/nickname</td>
+                <td>{ ‘state’: stateName, ‘nickname’: nickname }</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span>/population</td>
+                <td>{ ‘state’: stateName, ‘population’: population }</td>
+            </tr>
+            <tr>
+                <td>/states/<span class="state-color">:state</span>/admission</td>
+                <td>{ ‘state’: stateName, ‘admitted’: admissionDate }</td>
+            </tr>
+        </tbody>
+    </table>
 	</body>
 </html>

@@ -1,13 +1,15 @@
-const statesJson = require('../model/statesData.json');
+const statesData = require('../models/statesData.json');
 
-// Takes in user's request and returns true if
-// valid state code provided. Returns false otherwise.
-const verifyStates = (req) => {
-    if (!req.params?.state) return res.status(400).json({ 'message': 'State code required.' });
-    const stateCode = statesJson.map(state => state.code); // array of state codes
-    const upcaseState = req.params.state.toUpperCase(); // user requested state
-    return (stateCode.includes(upcaseState));
-}
+const stateCodes = statesData.map(state => state.code);
 
+const verifyStates = (req, res, next) => {
+    const stateCode = req.params.state.toUpperCase();
+    if (stateCodes.includes(stateCode)) {
+        req.code = stateCode; 
+        next();
+    } else {
+        res.status(404).json({ message: 'Invalid state abbreviation parameter' });
+    }
+};
 
 module.exports = verifyStates;
