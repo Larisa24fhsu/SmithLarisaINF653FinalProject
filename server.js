@@ -29,12 +29,18 @@ app.use(cors({
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// Serve static files from the ./public directory.
-app.use('/', express.static(path.join(__dirname, '/public')));
+app.use((req, res, next) => {
+    console.log(`[${req.method}] ${req.url}`);
+    next();
+});
+
 
 // Routes
 app.use('/', require('./routes/root'))
-app.use('/states', require('./routes/states'))
+app.use('/statesRoutes', require('./routes/statesRoutes'));
+
+// Serve static files from the ./public directory.
+app.use('/', express.static(path.join(__dirname, '/public')));
 
 // 404 Handler
 app.all('*', (req, res) => {

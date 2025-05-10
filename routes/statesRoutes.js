@@ -2,36 +2,31 @@ const express = require('express');
 const router = express.Router();
 const statesController = require('../controllers/statesController');
 const data = {};
-data.states = require('../../model/states.json');
-const verifyStates = require('../../middleware/verifyStates'); // Keep this if needed elsewhere
+data.states = require('../models/statesData.json');
+const verifyJWT = require('../middleware/verifyJWT.js'); // Optional if not used here
 
-// Middleware to validate the :state parameter
+// Validate the :state parameter
 router.param('state', (req, res, next, state) => {
-    const validStates = data.states.map(state => state.code); // Extract state codes from states.json
+    const validStates = data.states.map(state => state.code.toUpperCase());
     console.log(`Validating state: ${state}`);
-    console.log(`Valid states: ${validStates}`);
     if (!validStates.includes(state.toUpperCase())) {
-        console.log('Invalid state abbreviation');
         return res.status(400).json({ message: 'Invalid state abbreviation parameter' });
     }
-    console.log('State is valid');
     next();
 });
 
-
+// Routes
 router.route('/')
     .get(statesController.getAllStates);
-
-router.use('/:state', require('../middleware/stateData'));
 
 router.route('/:state')
     .get(statesController.getState);
 
 router.route('/:state/funfact')
-    .get(statesController.getStateFunFact)
-    .post(statesController.postStateFunFact)
-    .patch(statesController.replaceStateFunFact)
-    .delete(statesController.deleteStateFunFact);
+    .get(statesController.getFunfact)
+    .post(statesController.createNewFunfacts)
+    .patch(statesController.updateFunfact)
+    .delete(statesController.deleteFunfact);
 
 router.route('/:state/capital')
     .get(statesController.getCapital);
@@ -44,5 +39,5 @@ router.route('/:state/population')
 
 router.route('/:state/admission')
     .get(statesController.getAdmission);
-    
+
 module.exports = router;

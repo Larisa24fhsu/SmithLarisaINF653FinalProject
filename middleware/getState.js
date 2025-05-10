@@ -1,4 +1,4 @@
-const statesJson = require('../model/states.json');
+const statesJson = require('../models/states.json');
 
 const getState = (stateCode) => {
     const jsonState = statesJson.filter(state => state.code === stateCode)[0];

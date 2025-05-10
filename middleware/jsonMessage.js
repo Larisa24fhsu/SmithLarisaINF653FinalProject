@@ -1,8 +1,8 @@
-const verifyStates = require('./verifyStates');
-const statesJson = require('../model/states.json');
+const verifyJWT = require('./verifyJWT');
+const statesJson = require('../models/statesData.json');
 
 const jsonMessage = (req, res, stateInfo='none') => {
-    if (verifyStates(req)) {
+    if (verifyJWT(req)) {
         const jsonState = statesJson.find(s => s.code == req.params.state.toUpperCase());
         const message = { 'state': jsonState.state };
         switch (stateInfo) {

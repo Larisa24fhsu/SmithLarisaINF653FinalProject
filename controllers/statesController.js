@@ -1,5 +1,5 @@
-const State = require('../model/State');
-const statesJson = require('../model/states.json');
+const State = require('../models/states');
+const statesJson = require('../models/statesData.json');
 const jsonMessage = require('../middleware/jsonMessage');
 const res = require('express/lib/response');
 

@@ -1,0 +1,30 @@
+{
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "mongodb": "^6.16.0",
+    "mongoose": "^8.14.2",
+    "path-to-regexp": "^8.2.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "name": "inf653finalproject",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Larisa24fhsu/SmithLarisaINF653FinalProject.git"
+  },
+  "homepage": "https://github.com/brtilley/INF653FinalProject#readme",
+  "description": "",
+  "engines": {
+    "node": "^16.0.0"
+  }
+}
