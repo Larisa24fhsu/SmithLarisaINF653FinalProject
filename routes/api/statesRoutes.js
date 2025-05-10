@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const statesController = require('../controllers/statesController');
+const statesController = require('../../controllers/statesController');
 const data = {};
-data.states = require('../models/statesData.json');
-const verifyJWT = require('../middleware/verifyJWT.js'); // Optional if not used here
+data.states = require('../../model/statesData.json');
+const verifyJWT = require('../../middleware/verifyStates'); // Optional if not used here
 
 // Validate the :state parameter
 router.param('state', (req, res, next, state) => {

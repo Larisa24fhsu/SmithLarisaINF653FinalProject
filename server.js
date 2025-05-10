@@ -1,48 +1,53 @@
-// Load .env configuration
-require('dotenv').config();
+const DATABASE_URI = process.env.DATABASE_URI;
 
+
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
+const corsOptions = require('./config/corsOptions');
+const { logger } = require('./middleware/logEvents');
+const errorHandler = require('./middleware/errorHandler');
+const credentials = require('./middleware/credentials');
+const verifyStates = require('./middleware/verifyStates');
+const rootRouter = require('./routes/root');
+const statesRouter = require('./routes/api/statesRoutes');
 const mongoose = require('mongoose');
+const connectDB = require('./config/connectDB');
+const PORT = process.env.PORT || 3000;
 
-// Port to bind the server to
-const PORT = process.env.PORT || 80;
+// Connect to MongoDB
+connectDB();
 
-// Initiate database connection. This would take a while,
-// so it is best started as soon as possible.
-mongoose.connect(process.env.DATABASE_URI, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
-// CORS
-app.use(cors({
-    origin: (origin, callback) => {
-        callback(null, true);
-    },
-    optionsSuccessStatus: 200
-}));
+// custom middleware logger
+app.use(logger);
 
-// Pre-processing middleware
+// Handle options credentials check - before CORS!
+// and fetch cookies credentials requirement
+app.use(credentials);
+
+// Cross Origin Resource Sharing
+app.use(cors(corsOptions));
+
+// built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
+
+// built-in middleware for json 
 app.use(express.json());
 
-app.use((req, res, next) => {
-    console.log(`[${req.method}] ${req.url}`);
-    next();
-});
-
-
-// Routes
-app.use('/', require('./routes/root'))
-app.use('/statesRoutes', require('./routes/statesRoutes'));
-
-// Serve static files from the ./public directory.
+//serve static files
 app.use('/', express.static(path.join(__dirname, '/public')));
 
-// 404 Handler
+// routes
+app.use('/', require('./routes/root'));
+app.use('/states', require('./routes/api/statesRoutes'));
+
+// Handle all other routes
 app.all('*', (req, res) => {
     res.status(404);
     if (req.accepts('html')) {
@@ -54,7 +59,15 @@ app.all('*', (req, res) => {
     }
 });
 
-// Setup complete and DB connection established - initialize server
-mongoose.connection.once('connected', () => {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const events = require('events');
+events.EventEmitter.defaultMaxListeners = 15; // Increase the limit
+
+app.use(errorHandler);
+
+app.use((req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.url}`);
+    next();
 });
+
+console.log(`Server running on port ${PORT}`);
+console.log(`Database URI: ${process.env.DATABASE_URI}`);
