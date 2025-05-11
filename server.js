@@ -14,13 +14,12 @@ const verifyStates = require("./middleware/verifyStates");
 const statesController = require("./controllers/statesController");
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json());
 
 // Routes
 app.use("/states", statesRouter);
-statesRouter.get("/:state", verifyStates, statesController.getState);
-statesRouter.get("/:state/funfact", verifyStates, statesController.getFunFact); // Add this route
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "views")));
